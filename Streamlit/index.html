@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us</title>
+  <link rel="stylesheet" href="about.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="login.js"></script>
+  <script>
+    function clickAndSelect() {
+      let cards = Array.from(document.querySelectorAll('.card')),
+          elements = [];
+    
+      cards.forEach(card => {
+        elements = elements.concat(Array.from(card.children));
+      });
+    
+      elements.forEach(element => {
+        element.addEventListener('click', e => e.preventDefault());
+        
+        element.addEventListener('mousedown', e => {
+          let card = e.target.closest(".card");
+          card.setAttribute('data-md', Date.now());
+        });
+        
+        element.addEventListener('mouseup', e => {
+          e.stopPropagation();
+    
+          let card = (e.target.classList.contains("card")) ? e.target : e.target.closest('.card'),
+              then = card.getAttribute('data-md'),
+              now = Date.now();
+    
+          if(now - then < 200) {
+            window.location = card.querySelector('a').href;
+            card.classList.add('visited');
+            console.log(card.querySelector('a').href);
+          }
+    
+          card.removeAttribute('data-md');
+        });
+      });
+    }
+
+    function validate() {
+      var user = document.querySelector('#user');
+      var pass = document.querySelector('#pass');
+      if (user.value == 'admin' && pass.value == 'vvit@123') {
+          document.cookie = "authenticated=true; path=/";
+          window.location = 'hm.html';
+          alert('Login Successful');
+          return true;
+      } else {
+          alert('Login Failed!...Try Again');
+          return false;
+      }
+    }
+
+    function logout() {
+      document.cookie = "authenticated=false; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      alert('Logged out successfully');
+      window.location = 'index.html';
+    }
+
+    function myFunction() {
+      var x = document.getElementById("pass");
+      x.type = (x.type === 'password') ? 'text' : 'password';
+    }
+
+    var isAuthenticated = document.cookie.indexOf("authenticated=true") >= 0;
+    if (isAuthenticated) {
+      document.body.className += " authenticated";
+    }
+  </script>
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
+
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      background-color: #293853;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .container {
+      margin: 20px 40px;
+      color: #ffffff;
+    }
+
+    .heading {
+      font-size: 60px;
+      color: white;
+    }
+
+    .heading span {
+      font-style: italic;
+      font-size: 30px;
+    }
+
+    .banner{
+      width: 100%; 
+      size-adjust: 100%;
+      font-size: 40px;
+      font-weight: bolder;
+      color: rgb(20, 73, 141);
+    }
+  </style>
+</head>
+
+<body onload="clickAndSelect()">
+  <div class="banner">
+    <center>
+      <div class="heading">
+        <h1>SMART GARBAGE MONITORING SYSTEM USING IOT</h1>
+        <h2>WELCOME TO ADMIN PORTAL</h2>
+      </div>
+      <marquee>SMART GARBAGE MONITORING SYSTEM USING IOT</marquee>
+    </center>
+  </div>
+  <button onclick="logout()">Logout</button>
+</body>
+</html>
